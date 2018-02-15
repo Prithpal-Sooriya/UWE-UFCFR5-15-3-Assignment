@@ -28,6 +28,20 @@
       $inputFileName = "air_quality.csv";
       $outputFileNames = array("brislington.xml", "fishponds.xml", "parson_st.xml", "rupert_st.xml", "wells_rd.xml", "newfoundland_way.xml");
 
+      /*
+      Dirty solution to check if output files have been created.
+
+      A better solution would be to check if files were created,
+      update files if there was a change
+        - or even update files hourly/daily instead.
+      */
+      echo "reading files<br>";
+      if(file_exists($outputFileNames[0])) {
+        echo "files are already created!<br>";
+        echo "reading complete<br>";
+        exit(0);
+      }
+
       //open csv to read
       $inputFile = fopen($inputFileName, "rt");
 
@@ -218,6 +232,7 @@
       }
 
     ?>
+    <!-- plugin for live reloading, pretty shit, only works half of the time!! -->
     <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
   </body>
 </html>
