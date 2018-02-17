@@ -20,6 +20,19 @@
       - createTextNode = contains only text.... not sure too much about this..
       */
 
+      /*
+      NOTE: future plans
+      - divide and conquer --> break file into multiple parts and use threads!#
+        - figure out how to partition the large file
+        - figure out concurrent writing to file
+        - after files written use XSLT to sort the files by date?
+          - we cannot use xslt to do the selection part of the assignment.
+
+      - add better checks if main file (cvs) has not changed
+        - by checking date of change, or size of file?
+      - if changes made, append rather than write whole files again!
+      */
+
       //error reporting
       error_reporting(E_ALL | E_STRICT);
       ini_set('display_errors', true);
@@ -47,6 +60,8 @@
 
       //get headers of file
       $headers = fgetcsv($inputFile);
+
+      echo "creating contents of new file<br/>";
 
       //need to find out how to do arrays of DOM Documents...
       $docs = array(new DomDocument(), new DomDocument(), new DomDocument(), new DomDocument(), new DomDocument(), new DomDocument());
@@ -224,12 +239,14 @@
       }
 
       //now output to files!!!
+      echo "writing to new file<br/>";
       for ($i=0; $i < sizeof($docs); $i++) {
         $strxml = $docs[$i]->saveXML();
         $handle = fopen($outputFileNames[$i], "w");
         fwrite($handle, $strxml);
         fclose($handle);
       }
+      echo "writing complete";
 
     ?>
     <!-- plugin for live reloading, pretty shit, only works half of the time!! -->
