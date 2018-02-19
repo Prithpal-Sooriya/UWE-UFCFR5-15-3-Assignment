@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>
+    Nitrogen Dioxide levels for Wells Road.
+  </title>
+</head>
+<body>
+  <!-- will need to query php server -->
+
+  <p>Hello, click this button <a id="button" href="../backend/output.php">Click Me</a></p>
+  <p id="container"> <!-- empty container --> </p>
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+  <script type="text/javascript">
+  //actual script
+  $(document).ready(function() {
+    $('a#button').click(function() {
+      $ajax({
+        url: this.href,
+        type: 'GET',
+        dataType: 'html',
+        success: function(data) {
+          $('#container').html(data);
+        }
+      });
+    });
+  });
+  </script>
+</body>
+</html>
