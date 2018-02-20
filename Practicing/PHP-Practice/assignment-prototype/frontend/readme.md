@@ -31,5 +31,15 @@ After some searching, I found out that this is known as AJAX...
     - no clue how to do this!!
 
 ## currently doing
-- play around with html and php
-  - play around with AJAX and how to html to communicate with php server
+- done some good research!!
+  - html will be displayed using php!
+  - look through global constants of php
+    - \_SERVER, and \_POST...
+  - look at xmlhttp and javascript
+    - look at response codes
+      - 200 = OK response
+      - 4 = ready state -> when request is finished and response is ready
+    - [more on AJAX](https://www.w3schools.com/js/js_ajax_http.asp)
+  - [this for google.visualization.arrayToDataTable()](https://www.codexworld.com/create-dynamic-pie-chart-php-mysql-google-charts-api/)
+  - [this for json data google.visualization.DataTable(jsonData)](https://developers.google.com/chart/interactive/docs/php_example)
+    - [this for datatable class](https://developers.google.com/chart/interactive/docs/reference#DataTable)
