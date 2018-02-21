@@ -42,6 +42,14 @@ $outputFileName = str_replace(".xml", "", $inputFileName);
 $outputFileName = $outputFileName."_no2.xml"; //xml writer requires uri
 echo $outputFileName;
 // exit(0);
+
+//check if file already exists..
+//in future add check to see if file needs updating
+if(file_exists($inputFileName)) {
+  echo "file already exists!";
+  exit(0);
+}
+
 //xml reader
 $reader = new XMLReader();
 if(!$reader->open($inputFileName)) {

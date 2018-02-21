@@ -24,7 +24,7 @@
 <body>
 	<div class="container">
 	    <h1>Search Users</h1>
-	    <form> 
+	    <form>
 	    	Search User: <input type="text" class="form-control" onkeyup="showSuggestion(this.value)">
 	    </form>
 	    <p>Suggestions: <span id="output" style="font-weight:bold"></span></p>

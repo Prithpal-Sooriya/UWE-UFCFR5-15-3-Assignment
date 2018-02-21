@@ -43,3 +43,9 @@ After some searching, I found out that this is known as AJAX...
   - [this for google.visualization.arrayToDataTable()](https://www.codexworld.com/create-dynamic-pie-chart-php-mysql-google-charts-api/)
   - [this for json data google.visualization.DataTable(jsonData)](https://developers.google.com/chart/interactive/docs/php_example)
     - [this for datatable class](https://developers.google.com/chart/interactive/docs/reference#DataTable)
+
+
+- how to create json format for google charts
+  - https://stackoverflow.com/questions/12994282/php-mysql-google-chart-json-complete-example
+  - https://stackoverflow.com/questions/29926717/google-chart-api-make-use-of-datetime-value
+    - this one shows how to add tool tip!
