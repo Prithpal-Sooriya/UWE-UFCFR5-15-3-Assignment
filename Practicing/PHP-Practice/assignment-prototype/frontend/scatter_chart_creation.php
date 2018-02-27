@@ -69,6 +69,8 @@ while($reader->name === "reading") {
   $googleChartsJSONDate .= date("i", $date->format("U")).", ";
   $googleChartsJSONDate .= date("s", $date->format("U")).")";
 
+  if(date("Y", $date->format("U")) == "2017") echo "2017<br/>";
+
   // echo $googleChartsJSONDate."<br/>";
   // echo "hello, fuckin work please!!<br/>";
   // exit(0);
@@ -83,8 +85,8 @@ $table["rows"] = $rows;
 
 //convert table into JSON format :DDD pls work...
 //there is a json encode in php
-$tableJSON = json_encode($table);
+// $tableJSON = json_encode($table);
 
 //echo this shit out --> since we want AJAX my man!!
-echo $tableJSON;
+// echo $tableJSON;
 ?>

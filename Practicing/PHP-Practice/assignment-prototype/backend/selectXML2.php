@@ -37,7 +37,7 @@ NOTE: we are supposed to learn xpath!! maybe use XPATH may be easier to query da
 */
 
 //file names
-$inputFileName = "wells_rd.xml";
+$inputFileName = "fishponds.xml";
 $outputFileName = str_replace(".xml", "", $inputFileName);
 $outputFileName = $outputFileName."_no2.xml"; //xml writer requires uri
 echo $outputFileName;
@@ -45,7 +45,7 @@ echo $outputFileName;
 
 //check if file already exists..
 //in future add check to see if file needs updating
-if(file_exists($inputFileName)) {
+if(file_exists($outputFileName)) {
   echo "file already exists!";
   exit(0);
 }

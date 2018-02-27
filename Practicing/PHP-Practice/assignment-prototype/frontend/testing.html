@@ -18,7 +18,7 @@
 
     function drawChart() {
       var jsonData = $.ajax({
-        url: "scatter_chart_creation.php",
+        url: "getData.php",
         dataType: "json",
         async: false
       }).responseText; //get response text from php file
@@ -28,7 +28,7 @@
 
       //instantiate and draw chart, passing some options
       var options = {
-        title: "NO2 over Time in Wells Road"
+        title: "NO2 over Time in Fishponds"
       }
       var chart = new google.visualization.ScatterChart(document.getElementById("chart_div"));
       chart.draw(data, options);
