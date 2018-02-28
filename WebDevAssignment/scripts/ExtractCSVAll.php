@@ -33,10 +33,16 @@
 $csvInputPath = "../files/air_quality.csv";
 $outputFileNames = array("brislington.xml", "fishponds.xml", "parson_st.xml", "rupert_st.xml", "wells_rd.xml", "newfoundland_way.xml");
 
-
+//if input file does not exist
 if(!file_exists($csvInputPath)) {
   echo "input file does not exist!";
   exit(0); //NOTE: exit and die are the same
+}
+
+//if output file already exists
+if(file_exists("../files/".$outputFileNames[0])) {
+  echo "output files already exists!";
+  exit(0);
 }
 
 $inputFile = fopen($csvInputPath, "rt");
