@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+  <head>
+    <title>Line Chart.</title>
+    <!--<link rel="stylesheet" type="text/css" href="css/slider.css">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+
+      //run this code when button is pressed
+      function showGraph() {
+
+        //script for creating scatter chart
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+          
+          var jsonData;
+          var time = document.getElementById("hourval").innerHTML;
+          var dateElement = document.getElementById("dates");
+          var date = dateElement.options[dateElement.selectedIndex].value;
+          var locationElement = document.getElementById("location");
+          var locationPath = locationElement.options[locationElement.selectedIndex].value;
+          var location = locationElement.options[locationElement.selectedIndex].text;
+          
+          var url = "../scripts/JSONCreator.php"
+          var params = "location="+locationPath+"&time="+time+"&date="+date;
+         
+          var xhttp = new XMLHttpRequest();
+          xhttp.open("POST", url, false); //set true when we learn async...
+          
+          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+          xhttp.onreadystatechange = function() {
+            if(xhttp.readyState==4 && xhttp.status==200) {
+              jsonData = xhttp.responseText;
+            }
+          }
+          xhttp.send(params);
+
+          //create table out of JSON retrieved from server
+          var data = new google.visualization.DataTable(jsonData);
+
+          //instantiate and draw chart, passing some options
+          var options = {
+            title: "NO2 over Time in " + location
+          }
+          var chart = new google.visualization.LineChart(document.getElementById("chart_div"));
+          chart.draw(data, options);
+        }
+
+      }
+    </script>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    
+
+
+    
+
+
+    <div id="chart_div"></div>
+
+    <!--<form action="../scripts/JSONCreator.php" method="post">-->
+
+    Time Interval: <span id="hourval"></span>
+    <input type="range" min="0" max="23" value="8" step="1" id="timeRange"> <br/>
+    <!-- update select onchange="myFunction().call(this, event)" -->
+    <select id="dates" onchange="showGraph()">
+      <option value="2015">2015</option>
+      <option value="2016" selected="selected">2016</option>
+      <option value="2017">2017</option>
+    </select> <br/>
+    <select id="location" onchange="showGraph()">
+      <option value="../files/brislington_no2.xml">Brislington</option>
+      <option value="../files/fishponds_no2.xml">Fishponds</option>
+      <option value="../files/parson_st_no2.xml">Parson Street</option>
+      <option value="../files/rupert_st_no2.xml">Rupert Street</option>
+      <option value="../files/wells_rd_no2.xml">Wells Road</option>
+      <option value="../files/newfoundland_way_no2.xml">Newfoundland Way</option>
+    </select>
+    <!--<input type="submit" onclick="showGraph()"> <br/>-->
+    <!--</form>-->
+
+    <script>
+      var slider = document.getElementById("timeRange");
+      var output = document.getElementById("hourval");
+
+      //display default slider value
+      if (slider.value < 10) {
+        output.innerHTML = "0" + slider.value + ":00:00";
+        console.log(output);
+      } else {
+        output.innerHTML = slider.value + ":00:00";
+        console.log(output);
+      }
+      showGraph();
+      //display new values
+      slider.oninput = function () {
+        var temp = (this.value < 10 ? "0" + this.value : this.value) + ":00:00";
+        output.innerHTML = temp;
+        showGraph();
+      }
+      
+      
+
+    </script>
+    
+    
+    
+  </body>
+</html>
