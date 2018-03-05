@@ -6,7 +6,6 @@
  * and open the template in the editor.
  */
 
-//just a basic test to see if this works
 $location = $_REQUEST["location"];
 $time = $_REQUEST["time"];
 $date = $_REQUEST["date"];
@@ -64,7 +63,8 @@ function createJSONUserSelection($inputFilePath, $selectedTime, $selectedDate) {
     $reading = simplexml_load_string($single->asXML());
     $date = DateTime::createFromFormat($dateFormat, ($reading->attributes()->date . " " . $reading->attributes()->time));
     $val = $reading->attributes()->val;
-
+    $val = abs($val);
+    
     # create json string (for date)
     $temp = array();
     $googleChartsJSONDate = "Date(";
@@ -76,7 +76,7 @@ function createJSONUserSelection($inputFilePath, $selectedTime, $selectedDate) {
     $googleChartsJSONDate .= date("s", $date->format("U")) . ")";
 
     $temp[] = array("v" => $googleChartsJSONDate); //add val
-    $temp[] = array("v" => (int) $val); //add val
+    $temp[] = array("v" => $val); //add val
     $rows[] = array("c" => $temp); //add row to new column
   }
 
@@ -120,7 +120,7 @@ function createJSONUserSelectionSorted($inputFilePath, $selectedTime, $selectedD
   foreach ($resultArr as $single) {
     $reading = simplexml_load_string($single->asXML());
     $date = DateTime::createFromFormat($dateFormat, ($reading->attributes()->date . " " . $reading->attributes()->time));
-    $val = $reading->attributes()->val;
+    $val = abs($reading->attributes()->val);
 
     # create json string (for date)
     $temp = array();
