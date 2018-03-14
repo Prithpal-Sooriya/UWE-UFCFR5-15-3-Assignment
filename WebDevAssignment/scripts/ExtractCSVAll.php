@@ -23,11 +23,6 @@
  *    - maybe place, outputfilenames, outputfileStrings and
  *        association key of into a class...
  *    - finally think about using threads :/
- * 
- * @todo TALK TO PRAKESH OF WHAT IS THE PURPOSE OF DIVIDE AND CONQUER
- *  - it was faster to read file sequentially and use a switch statement to write
- *    to each column to the corresponding file
- *    - UNLESS USING THREADS
  */
 
 $csvInputPath = "../files/air_quality.csv";
@@ -40,10 +35,10 @@ if(!file_exists($csvInputPath)) {
 }
 
 //if output file already exists
-if(file_exists("../files/".$outputFileNames[0])) {
-  echo "output files already exists!";
-  exit(0);
-}
+//if(file_exists("../files/".$outputFileNames[0])) {
+//  echo "output files already exists!";
+//  exit(0);
+//}
 
 $inputFile = fopen($csvInputPath, "rt");
 
@@ -57,8 +52,8 @@ $rowNum = 2;
 $count = count(fgetcsv($inputFile)) - 1; //-1 because we do not want location
 
 //array of tags/elements to create
-$tags = array("id", "desc", "date", "time", "nox", "no2", "lat", "long");
-
+$tags = array("id", "desc", "date", "time", "nox", "no", "no2", "lat", "long");
+echo $count;
 # START CREATING FILES
 
 //array of strings representing each file
@@ -127,7 +122,7 @@ fclose($inputFile); //good practice to close file.
  */
 function addRow($csvArr, $tagsArr, $count) {
   $ret = '<row>';
-  for ($index = 0; $index < $count-1; $index++) {
+  for ($index = 0; $index < $count; $index++) {
     $ret .= '<' . $tagsArr[$index] . ' val="' . trim($csvArr[$index]) . '"/>';
   }
   $ret .= '</row>';

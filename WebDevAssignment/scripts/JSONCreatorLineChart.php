@@ -57,6 +57,10 @@ function createJSONUserSelectionSorted($location, $time, $date) {
           . "(@date='$date' and translate(@time, ':', '') >= translate('$time', ':', '')) or"
           . "(@date='$nextDate' and translate(@time, ':', '') <= translate('$time', ':', ''))]");
 
+//  $resultArr = $xml->xpath("//reading["
+//          . "(@date='$date' and dateTime('$date',@time) >= dateTime('$date', '$time')) or"
+//          . "(@date='$nextDate' and dateTime('$nextDate', @time) <= dateTime('$nextDate', '$time'))]");
+  
   //need to sort array
   usort($resultArr, 'sortSimpleXMLElementByDateTime');
 
@@ -73,7 +77,7 @@ function createJSONUserSelectionSorted($location, $time, $date) {
   foreach ($resultArr as $single) {
     $reading = simplexml_load_string($single->asXML());
     $date = DateTime::createFromFormat($dateFormat, ($reading->attributes()->date . " " . $reading->attributes()->time));
-    $val = abs($reading->attributes()->val);
+    $val = ($reading->attributes()->val); //TOLD TO NOTE IN REPORT ROUGE VALUES.
 
     # create json string (for date)
     $temp = array();

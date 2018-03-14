@@ -10,12 +10,10 @@ and open the template in the editor.
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript">
-      function showGraph() {
-        //script for creating scatter chart
-        google.charts.load('current', {'packages': ['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
+      //ajax call for this one!
+      function getJSON2() {
+        var loadingDone = document.readyState == "complete" && jQuery.active === 0;
+        if (loadingDone) {
           var jsonData;
           var time = document.getElementById("hourVal").innerHTML;
           //date needs to be in format dd/mm/yyyy
@@ -30,59 +28,140 @@ and open the template in the editor.
           var locationElement = document.getElementById("location");
           var locationPath = locationElement.options[locationElement.selectedIndex].value;
           var location = locationElement.options[locationElement.selectedIndex].text;
-
           var url = "../scripts/JSONCreatorLineChart.php";
           var params = "location=" + locationPath + "&time=" + time + "&date=" + dateStr1;
 
-          //ajax
-          var xhttp = new XMLHttpRequest();
-          xhttp.open("POST", url, false); //set true when we learn async...
-          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-          xhttp.onreadystatechange = function () {
-            if (xhttp.readyState == 4 && xhttp.status == 200) {
-              jsonData = xhttp.responseText;
-            }
-          }
-          xhttp.send(params);
-          console.log(jsonData);
+          $.ajax({
+            url: url + "?" + params,
+            type: "POST",
+            success: (data) => drawChart(data)
+          });
 
-          //creation of google charts now!!#
-          var data = new google.visualization.DataTable(jsonData);
-          var options = {
-            title: "NO2 over Time in " + location + " from \n" + dateStr1 + " to " + dateStr2,
+//        console.log(jsonData);
+        }
+      }
+    </script>
+    <script type="text/javascript">
+
+
+      function getJSON() {
+        var jsonData;
+        var time = document.getElementById("hourVal").innerHTML;
+        //date needs to be in format dd/mm/yyyy
+        var dateDOM = document.getElementById("date").value;
+
+        //convert YYYY-MM-DD to DD-MM-YYYY
+        var date = new Date(dateDOM);
+        var dateStr1 = getDateString(date);
+        date.setDate(date.getDate() + 1);
+        var dateStr2 = getDateString(date);
+
+        var locationElement = document.getElementById("location");
+        var locationPath = locationElement.options[locationElement.selectedIndex].value;
+        var location = locationElement.options[locationElement.selectedIndex].text;
+
+        var url = "../scripts/JSONCreatorLineChart.php";
+        var params = "location=" + locationPath + "&time=" + time + "&date=" + dateStr1;
+
+        //ajax using xmlHttpRequest.
+//          var xhttp = new XMLHttpRequest();
+//          xhttp.open("POST", url, false); //set true when we learn async...
+//          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//          xhttp.onreadystatechange = function () {
+//            if (xhttp.readyState == 4 && xhttp.status == 200) {
+//              jsonData = xhttp.responseText;
+//            }
+//          }
+//          xhttp.send(params);
+
+        //ajax using fetch
+//        window.stop();
+        var promise = fetch(url + "?" + params, {
+          method: "POST",
+        })
+                .then(function (response) {
+                  if (response.ok) {
+                    let contentType = response.headers.get('content-type');
+                    if (contentType.includes('application/json')) {
+                      return response.json();
+                    }
+                    if (contentType.includes('text/html')) {
+                      return response.text();
+                    }
+                  } else {
+                    if (response.status === 404) {
+                      return Promise.reject("Not Found.");
+                    } else if (response.status === 403) {
+                      return Promise.reject("Forbidden.");
+                    } else {
+                      return Promise.reject("Something wrong.");
+                    }
+                  }
+                })
+                .then(function (data) {
+//                  console.log(text == jsonData)
+//                  jsonData = text;
+//                  showGraph(text);
+//                    console.log(data);
+//                    showGraph(data);
+                  drawChart(data);
+                })
+                .catch(function (err) {
+                  jsonData = "Hello";
+                });
+//        console.log(jsonData);
+      }
+
+
+
+      function drawChart(jsonData) {
+        //creation of google charts now!!#
+//        console.log("sdsgfsf")
+        var data = new google.visualization.DataTable(jsonData);
+        var options = {
+//          title: "NO2 over Time in " + location + " from \n" + dateStr1 + " to " + dateStr2,
 //            focusTarget: 'category',
-            tooltip: {
-              isHtml: true
-            },
-            hAxis: {
-              gridlines: {
-                count: -1,
-                units: {
-                  days: {format: ["dd MMM"]},
-                  hours: {format: ["HH:mm", 'ha']}
-                }
-              },
-              minorGridlines: {
-                units: {
-                  hours: {format: ["hh:mm:ss a", "ha"]},
-                  minutes: {format: ["HH:mm a Z", ":mm"]}
-                }
+          tooltip: {
+            isHtml: true
+          },
+          hAxis: {
+            gridlines: {
+              count: -1,
+              units: {
+                days: {format: ["dd MMM"]},
+                hours: {format: ["HH:mm", 'ha']}
               }
             },
-            vAxis: {
-              format: "0"
+            minorGridlines: {
+              units: {
+                hours: {format: ["hh:mm:ss a", "ha"]},
+                minutes: {format: ["HH:mm a Z", ":mm"]}
+              }
             }
-            
+          },
+          vAxis: {
+            format: "0"
           }
-          var chart = new google.visualization.LineChart(document.getElementById("chart_div"));
-          chart.draw(data, options);
 
         }
-
-
+        var chart = new google.visualization.LineChart(document.getElementById("chart_div"));
+        chart.draw(data, options);
       }
 
     </script>
+    <script type="text/javascript">
+//      function showGraph(jsonData) {
+//        google.load("visualization", "1.1", {packages: ["controls"]});
+//        console.log("ewgtg")
+      google.charts.load('current', {packages: ['corechart']});
+      google.setOnLoadCallback(function () {
+//        window.stop();
+        drawChart(jsonData);
+      });
+//      }
+    </script>
+
+
 
     <script type="text/javascript">
       function getDateString(date) {
@@ -109,7 +188,7 @@ and open the template in the editor.
     <input type="range" min="0" max="23" value="8" step="1" id="timeRange"/>
     <br/>
 
-    <input type="date" id="date" value="2016-07-01" max = "2017-02-17" onchange="showGraph()"/>
+    <input type="date" id="date" value="2016-07-01" max = "2017-02-17" onchange="getJSON2()"/>
     <!--    <select id="dates" onchange="showGraph()">
           <option value="2015">2015</option>
           <option value="2016" selected="selected">2016</option>
@@ -117,7 +196,7 @@ and open the template in the editor.
         </select>-->
     <br/>
 
-    <select id="location" onchange="showGraph()">
+    <select id="location" onchange="getJSON2()">
       <option value="../files/brislington_no2.xml">Brislington</option>
       <option value="../files/fishponds_no2.xml">Fishponds</option>
       <option value="../files/parson_st_no2.xml">Parson Street</option>
@@ -134,21 +213,21 @@ and open the template in the editor.
       //display default slider value
       if (slider.value < 10) {
         output.innerHTML = "0" + slider.value + ":00:00";
-        console.log(output);
+//        console.log(output);
 
       } else {
         output.innerHTML = slider.value + ":00:00";
-        console.log(output);
+//        console.log(output);
       }
 
-      showGraph(); //dynamic update :D
+      getJSON2(); //dynamic update :D
 
       //refresh new values
       slider.oninput = function () {
         var temp = (this.value < 10 ? "0" : "") + this.value + ":00:00";
         output.innerHTML = temp;
-        console.log(output);
-        showGraph();
+//        console.log(output);
+        getJSON2();
       }
     </script>
   </body>

@@ -55,7 +55,8 @@ function createJSONUserSelection($inputFilePath, $selectedTime, $selectedDate) {
   $table = array();
   $table["cols"] = array(
       array("label" => "date/time", "type" => "date"),
-      array("label" => "NO2", "type" => "number")
+      array("label" => "NO2", "type" => "number"),
+      array("id"=>"", "role" => "style", "type" => "string")
   );
 
   $dateFormat = "d/m/Y H:i:s";
@@ -63,7 +64,7 @@ function createJSONUserSelection($inputFilePath, $selectedTime, $selectedDate) {
     $reading = simplexml_load_string($single->asXML());
     $date = DateTime::createFromFormat($dateFormat, ($reading->attributes()->date . " " . $reading->attributes()->time));
     $val = $reading->attributes()->val;
-    $val = abs($val);
+//    $val = abs($val);
     
     # create json string (for date)
     $temp = array();
@@ -77,6 +78,11 @@ function createJSONUserSelection($inputFilePath, $selectedTime, $selectedDate) {
 
     $temp[] = array("v" => $googleChartsJSONDate); //add val
     $temp[] = array("v" => $val); //add val
+    
+    //figure out which colour
+    $colour = "#000000"; //calc the colour
+    $temp[] = array("v" => $color);
+    
     $rows[] = array("c" => $temp); //add row to new column
   }
 
@@ -113,10 +119,12 @@ function createJSONUserSelectionSorted($inputFilePath, $selectedTime, $selectedD
   $table = array();
   $table["cols"] = array(
       array("label" => "date/time", "type" => "date"),
-      array("label" => "NO2", "type" => "number")
+      array("label" => "NO2", "type" => "number"),
+      array("role" => "style", "type" => "string")
   );
 
   $dateFormat = "d/m/Y H:i:s";
+  $colorNumber = 0;
   foreach ($resultArr as $single) {
     $reading = simplexml_load_string($single->asXML());
     $date = DateTime::createFromFormat($dateFormat, ($reading->attributes()->date . " " . $reading->attributes()->time));
@@ -134,6 +142,12 @@ function createJSONUserSelectionSorted($inputFilePath, $selectedTime, $selectedD
 
     $temp[] = array("v" => $googleChartsJSONDate); //add val
     $temp[] = array("v" => (int) $val); //add val
+    
+    //color
+    
+    $color = selectColor($val);
+    $temp[] = array("v" => $color);
+    
     $rows[] = array("c" => $temp); //add row to new column
   }
 
@@ -141,6 +155,42 @@ function createJSONUserSelectionSorted($inputFilePath, $selectedTime, $selectedD
   $tableJSON = json_encode($table);
   return $tableJSON; //return the string
 }
+
+
+function selectColor($val) {
+  if($val >= 0 && $val <=67) {
+    return "#DAF7A6";
+  }
+  if($val >= 68 && $val <=134) {
+    return "#80FF00";
+  }
+  if($val >= 135 && $val <=200) {
+    return "#94C800";
+  }
+  if($val >= 201 && $val <=267) {
+    return "#F3F000";
+  }
+  if($val >= 268 && $val <=334) {
+    return "#FFC300";
+  }
+  if($val >= 335 && $val <=400) {
+    return "#F19A00";
+  }
+  if($val >= 401 && $val <=467) {
+    return "#FF5F5F";
+  }
+  if($val >= 468 && $val <=534) {
+    return "#FE0404";
+  }
+  if($val >= 535 && $val <=600) {
+    return "#900C3F";
+  }
+  if($val >= 601) {
+    return "#BE02E3";
+  }
+  
+}
+
 
 /**
  * Sorts 2 simplexmlelements by their dates!!

@@ -79,8 +79,8 @@ function writeNO2File($inputFilePath, $outputFilePath) {
   file_put_contents($outputFilePath, "");
   
   //start writing the document
-  $writer->startDocument("1.0");
-  $writer->setIndent("2");
+  $writer->startDocument("1.0", "UTF-8");
+  $writer->setIndent(true);
   $writer->startElement("data");
   $writer->writeAttribute("type", "nitrogen dioxide");
   
