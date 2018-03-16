@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+  <head>
+    <title>Scatter Chart</title>
+    <meta charset="UTF-8">
+
+    <!--<link rel="stylesheet" type="text/css" href="css/slider.css">-->
+    <link rel="stylesheet" type="text/css" href="css/ScatterChart.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/ScatterChart.js"></script>
+
+  </head>
+  <body>
+    <div id="chart_div"></div>
+
+    <!--<form action="../scripts/JSONCreatorYear.php" method="post">-->
+    <div>
+      <span>Time Interval:</span> <span id="timeOutput"></span>
+    </div>
+    <div>
+      <input id="timeSlider" type="range" min="0" max="23" value="8" step="0.25" onchange="updateChartAndSlider()" oninput="updateChartAndSlider()"> <br/>
+    </div>
+
+    <div>
+      <span>Date:</span>
+      <select id="dates" onchange="updateChart()">
+        <option value="2014">2014</option>
+        <option value="2015">2015</option>
+        <option value="2016" selected="selected">2016</option>
+        <option value="2017">2017</option>
+      </select>
+    </div>
+    
+    <div>
+      <span>Location:</span>
+      <select id="location" onchange="updateChart()">
+        <option value="../files/brislington_no2.xml">Brislington</option>
+        <option value="../files/fishponds_no2.xml">Fishponds</option>
+        <option value="../files/parson_st_no2.xml">Parson Street</option>
+        <option value="../files/rupert_st_no2.xml">Rupert Street</option>
+        <option value="../files/wells_rd_no2.xml">Wells Road</option>
+        <option value="../files/newfoundland_way_no2.xml">Newfoundland Way</option>
+      </select>
+    </div>
+    <!--<input type="submit" onclick="showGraph()"> <br/>-->
+    <!--</form>-->
+
+  </body>
+</html>

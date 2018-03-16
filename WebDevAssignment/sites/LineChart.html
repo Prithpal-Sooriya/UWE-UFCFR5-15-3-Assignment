@@ -12,8 +12,9 @@ and open the template in the editor.
     <script type="text/javascript">
       //ajax call for this one!
       function getJSON2() {
-        var loadingDone = document.readyState == "complete" && jQuery.active === 0;
-        if (loadingDone) {
+//        var loadingDone = document.readyState == "complete" && jQuery.active === 0;
+//          var loadingDone = jQuery.active === 0;
+//          if (loadingDone) {
           var jsonData;
           var time = document.getElementById("hourVal").innerHTML;
           //date needs to be in format dd/mm/yyyy
@@ -38,79 +39,79 @@ and open the template in the editor.
           });
 
 //        console.log(jsonData);
-        }
+//        }
       }
     </script>
     <script type="text/javascript">
 
 
-      function getJSON() {
-        var jsonData;
-        var time = document.getElementById("hourVal").innerHTML;
-        //date needs to be in format dd/mm/yyyy
-        var dateDOM = document.getElementById("date").value;
-
-        //convert YYYY-MM-DD to DD-MM-YYYY
-        var date = new Date(dateDOM);
-        var dateStr1 = getDateString(date);
-        date.setDate(date.getDate() + 1);
-        var dateStr2 = getDateString(date);
-
-        var locationElement = document.getElementById("location");
-        var locationPath = locationElement.options[locationElement.selectedIndex].value;
-        var location = locationElement.options[locationElement.selectedIndex].text;
-
-        var url = "../scripts/JSONCreatorLineChart.php";
-        var params = "location=" + locationPath + "&time=" + time + "&date=" + dateStr1;
-
-        //ajax using xmlHttpRequest.
-//          var xhttp = new XMLHttpRequest();
-//          xhttp.open("POST", url, false); //set true when we learn async...
-//          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//          xhttp.onreadystatechange = function () {
-//            if (xhttp.readyState == 4 && xhttp.status == 200) {
-//              jsonData = xhttp.responseText;
-//            }
-//          }
-//          xhttp.send(params);
-
-        //ajax using fetch
-//        window.stop();
-        var promise = fetch(url + "?" + params, {
-          method: "POST",
-        })
-                .then(function (response) {
-                  if (response.ok) {
-                    let contentType = response.headers.get('content-type');
-                    if (contentType.includes('application/json')) {
-                      return response.json();
-                    }
-                    if (contentType.includes('text/html')) {
-                      return response.text();
-                    }
-                  } else {
-                    if (response.status === 404) {
-                      return Promise.reject("Not Found.");
-                    } else if (response.status === 403) {
-                      return Promise.reject("Forbidden.");
-                    } else {
-                      return Promise.reject("Something wrong.");
-                    }
-                  }
-                })
-                .then(function (data) {
-//                  console.log(text == jsonData)
-//                  jsonData = text;
-//                  showGraph(text);
-//                    console.log(data);
-//                    showGraph(data);
-                  drawChart(data);
-                })
-                .catch(function (err) {
-                  jsonData = "Hello";
-                });
-//        console.log(jsonData);
-      }
+//      function getJSON() {
+//        var jsonData;
+//        var time = document.getElementById("hourVal").innerHTML;
+//        //date needs to be in format dd/mm/yyyy
+//        var dateDOM = document.getElementById("date").value;
+//
+//        //convert YYYY-MM-DD to DD-MM-YYYY
+//        var date = new Date(dateDOM);
+//        var dateStr1 = getDateString(date);
+//        date.setDate(date.getDate() + 1);
+//        var dateStr2 = getDateString(date);
+//
+//        var locationElement = document.getElementById("location");
+//        var locationPath = locationElement.options[locationElement.selectedIndex].value;
+//        var location = locationElement.options[locationElement.selectedIndex].text;
+//
+//        var url = "../scripts/JSONCreatorLineChart.php";
+//        var params = "location=" + locationPath + "&time=" + time + "&date=" + dateStr1;
+//
+//        //ajax using xmlHttpRequest.
+////          var xhttp = new XMLHttpRequest();
+////          xhttp.open("POST", url, false); //set true when we learn async...
+////          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+////          xhttp.onreadystatechange = function () {
+////            if (xhttp.readyState == 4 && xhttp.status == 200) {
+////              jsonData = xhttp.responseText;
+////            }
+////          }
+////          xhttp.send(params);
+//
+//        //ajax using fetch
+////        window.stop();
+//        var promise = fetch(url + "?" + params, {
+//          method: "POST",
+//        })
+//                .then(function (response) {
+//                  if (response.ok) {
+//                    let contentType = response.headers.get('content-type');
+//                    if (contentType.includes('application/json')) {
+//                      return response.json();
+//                    }
+//                    if (contentType.includes('text/html')) {
+//                      return response.text();
+//                    }
+//                  } else {
+//                    if (response.status === 404) {
+//                      return Promise.reject("Not Found.");
+//                    } else if (response.status === 403) {
+//                      return Promise.reject("Forbidden.");
+//                    } else {
+//                      return Promise.reject("Something wrong.");
+//                    }
+//                  }
+//                })
+//                .then(function (data) {
+////                  console.log(text == jsonData)
+////                  jsonData = text;
+////                  showGraph(text);
+////                    console.log(data);
+////                    showGraph(data);
+//                  drawChart(data);
+//                })
+//                .catch(function (err) {
+//                  jsonData = "Hello";
+//                });
+////        console.log(jsonData);
+//      }
 
 
 
@@ -227,8 +228,12 @@ and open the template in the editor.
         var temp = (this.value < 10 ? "0" : "") + this.value + ":00:00";
         output.innerHTML = temp;
 //        console.log(output);
-        getJSON2();
-      }
+//        getJSON2();
+          var loadingDone = jQuery.active === 0;
+          if(loadingDone) {
+            getJSON2();
+          }
+      };
     </script>
   </body>
 </html>
