@@ -1,95 +1,21 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * PHP file used for the ScatterChart.html ajax calls.
+ * It will return json data from given parameters (that google charts can use)
+ * 
+ * @author Prithpal Sooriya
  */
 
+#user requests
 $location = $_REQUEST["location"];
 $time = $_REQUEST["time"];
 $date = $_REQUEST["date"];
-//echo "Hello world!!";
-echo createJSONUserSelectionSorted($location, $time, $date);
 
-
-
-/**
- * Creates a JSON from a given file.
- * This does not consider user input.
- * 
- * @param string $inputFilePath relative path of xml file to use.
- * @return string JSON created in form of string returned.
- * 
- * @todo add check to see if file is xml
- * @todo return output of nothing, if no data found (so Higher level calls can handle it)
- * @todo test all use cases (and handle potential errors)
- */
-function createJSON($inputFilePath) {
-  //default will use time = 08:00:00, and date = 2016
-  createJSONUserSelection($inputFilePath, "08:00:00", "2016");
-}
-
-/**
- * This will take user input of time and date and return equivalent JSON
- * 
- * @param string $inputFilePath relative path of xml file to use
- *
- * @param string $selectedTime users selected time, format = HH:MM:SS (e.g. 08:00:00)
- * @todo support time range?
- *
- * @param strigng $selectedDate user selected date, format = YYYY (e.g. 2016)
- * @todo support date range?
- * 
- * @todo add check to see if xml
- * @todo return nothing if no data found (higher level calls will handle it)
- * @todo error handling and testing
- */
-function createJSONUserSelection($inputFilePath, $selectedTime, $selectedDate) {
-  $xml = simplexml_load_file($inputFilePath);
-
-
-  $resultArr = $xml->xpath("//reading[@time='$selectedTime' and contains(@date,'$selectedDate')]");
-
-  $rows = array();
-  $table = array();
-  $table["cols"] = array(
-      array("label" => "date/time", "type" => "date"),
-      array("label" => "NO2", "type" => "number"),
-      array("id"=>"", "role" => "style", "type" => "string")
-  );
-
-  $dateFormat = "d/m/Y H:i:s";
-  foreach ($resultArr as $single) {
-    $reading = simplexml_load_string($single->asXML());
-    $date = DateTime::createFromFormat($dateFormat, ($reading->attributes()->date . " " . $reading->attributes()->time));
-    $val = $reading->attributes()->val;
-//    $val = abs($val);
-    
-    # create json string (for date)
-    $temp = array();
-    $googleChartsJSONDate = "Date(";
-    $googleChartsJSONDate .= date("Y", $date->format("U")) . ", ";
-    $googleChartsJSONDate .= (date("m", $date->format("U")) - 1) . ", ";
-    $googleChartsJSONDate .= date("d", $date->format("U")) . ", ";
-    $googleChartsJSONDate .= date("H", $date->format("U")) . ", ";
-    $googleChartsJSONDate .= date("i", $date->format("U")) . ", ";
-    $googleChartsJSONDate .= date("s", $date->format("U")) . ")";
-
-    $temp[] = array("v" => $googleChartsJSONDate); //add val
-    $temp[] = array("v" => $val); //add val
-    
-    //figure out which colour
-    $colour = "#000000"; //calc the colour
-    $temp[] = array("v" => $color);
-    
-    $rows[] = array("c" => $temp); //add row to new column
-  }
-
-  $table["rows"] = $rows;
-  $tableJSON = json_encode($table);
-  return $tableJSON; //return the string
-}
+#test values
+//$location = "../files/fishponds_no2.xml";
+//$time = "10:00:00";
+//$date = "2015";
+echo createScatterJSON($location, $time, $date);
 
 /**
  * This will take user input of time and date and return equivalent JSON
@@ -98,56 +24,38 @@ function createJSONUserSelection($inputFilePath, $selectedTime, $selectedDate) {
  * @param string $inputFilePath relative path of xml file to use
  *
  * @param string $selectedTime users selected time, format = HH:MM:SS (e.g. 08:00:00)
- * @todo support time range?
  *
  * @param strigng $selectedDate user selected date, format = YYYY (e.g. 2016)
- * @todo support date range?
  * 
- * @todo add check to see if xml
- * @todo return nothing if no data found (higher level calls will handle it)
- * @todo error handling and testing
+ * @return string json string of the values from corresponding xml file
  */
-function createJSONUserSelectionSorted($inputFilePath, $selectedTime, $selectedDate) {
-
+function createScatterJSON($inputFilePath, $selectedTime, $selectedDate) {
   $xml = simplexml_load_file($inputFilePath);
   $resultArr = $xml->xpath("//reading[@time='$selectedTime' and contains(@date,'$selectedDate')]");
-
-  //need to sort array
-  usort($resultArr, 'sortSimpleXMLElementByDateTime'); //fingers crossed this sorting works!!
 
   $rows = array();
   $table = array();
   $table["cols"] = array(
-      array("label" => "date/time", "type" => "date"),
-      array("label" => "NO2", "type" => "number"),
-      array("role" => "style", "type" => "string")
+   array("label" => "date/time", "type" => "date"),
+   array("label" => "NO2", "type" => "number"),
+   array("role" => "style", "type" => "string")
   );
 
   $dateFormat = "d/m/Y H:i:s";
-  $colorNumber = 0;
   foreach ($resultArr as $single) {
     $reading = simplexml_load_string($single->asXML());
     $date = DateTime::createFromFormat($dateFormat, ($reading->attributes()->date . " " . $reading->attributes()->time));
-    $val = abs($reading->attributes()->val);
-
+    $val = $reading->attributes()->val; //no absolute, we will add talk about bad values in the report.
     # create json string (for date)
     $temp = array();
     $googleChartsJSONDate = "Date(";
-    $googleChartsJSONDate .= date("Y", $date->format("U")) . ", ";
-    $googleChartsJSONDate .= (date("m", $date->format("U")) - 1) . ", ";
-    $googleChartsJSONDate .= date("d", $date->format("U")) . ", ";
-    $googleChartsJSONDate .= date("H", $date->format("U")) . ", ";
-    $googleChartsJSONDate .= date("i", $date->format("U")) . ", ";
-    $googleChartsJSONDate .= date("s", $date->format("U")) . ")";
+    $googleChartsJSONDate .= date("Y, ", $date->format("U"));
+    $googleChartsJSONDate .= date("m", $date->format("U")) - 1 . ", "; //google charts wants months 0-11, cuz of goddamn java and javascript!
+    $googleChartsJSONDate .= date("d, H, i, s", $date->format("U")) . ")";
 
-    $temp[] = array("v" => $googleChartsJSONDate); //add val
+    $temp[] = array("v" => $googleChartsJSONDate); //add date
     $temp[] = array("v" => (int) $val); //add val
-    
-    //color
-    
-    $color = selectColor($val);
-    $temp[] = array("v" => $color);
-    
+    $temp[] = array("v" => NO2Color($val)); //add colour
     $rows[] = array("c" => $temp); //add row to new column
   }
 
@@ -156,61 +64,31 @@ function createJSONUserSelectionSorted($inputFilePath, $selectedTime, $selectedD
   return $tableJSON; //return the string
 }
 
-
-function selectColor($val) {
-  if($val >= 0 && $val <=67) {
-    return "#DAF7A6";
-  }
-  if($val >= 68 && $val <=134) {
-    return "#80FF00";
-  }
-  if($val >= 135 && $val <=200) {
-    return "#94C800";
-  }
-  if($val >= 201 && $val <=267) {
-    return "#F3F000";
-  }
-  if($val >= 268 && $val <=334) {
-    return "#FFC300";
-  }
-  if($val >= 335 && $val <=400) {
-    return "#F19A00";
-  }
-  if($val >= 401 && $val <=467) {
-    return "#FF5F5F";
-  }
-  if($val >= 468 && $val <=534) {
-    return "#FE0404";
-  }
-  if($val >= 535 && $val <=600) {
-    return "#900C3F";
-  }
-  if($val >= 601) {
-    return "#BE02E3";
-  }
-  
-}
-
-
 /**
- * Sorts 2 simplexmlelements by their dates!!
- * Very specific function... but oh well :P
- * 
- * @param SimpleXMLElement $a 1st object to compare against
- * @param SimpleXMLElement $b 2nd object to compare against
+ * function used to for retrieving the NO2 colour.
+ * @param integer $val value of NO2
+ * @return string corresponding hash colour
  */
-function sortSimpleXMLElementByDateTime($a, $b) {
-  $reading1 = simplexml_load_string($a->asXML());
-  $reading2 = simplexml_load_string($b->asXML());
+function NO2Color($val) {
 
-  //get DATE and TIME formed together as DATETIME
-  $dateFormat = "d/m/Y H:i:s";
-  $date1 = DateTime::createFromFormat($dateFormat, ($reading1->attributes()->date . " " . $reading1->attributes()->time));
-  $date2 = DateTime::createFromFormat($dateFormat, ($reading2->attributes()->date . " " . $reading2->attributes()->time));
+  /**
+   * a short function used to tell if an integer is in range
+   * @param int $val value to check against
+   * @param int $min minimum value boundary
+   * @param int $max maximum value boundary
+   * @return boolean true if the value was in range, false if not
+   */
+  $inRange = function ($val, $min, $max) { return $min <= $val && $val <= $max;};
 
-  //return comparison
-  /* `Note: As of PHP 5.2.2, DateTime objects can be compared using comparison operators.` */
-  //fuck yeah ternary operators XD
-  return $date1 == $date2 ? 0 :
-          $date1 < $date2 ? -1 : 1;
+  //wish there was a shorthand if statement...
+  if($inRange($val, 0, 67)):    return "#9FFF8E"; endif;
+  if($inRange($val, 68, 134)):  return "#55FF00"; endif;
+  if($inRange($val, 135, 200)): return "#48C900"; endif;
+  if($inRange($val, 201, 267)): return "#FEFE00"; endif;
+  if($inRange($val, 268, 334)): return "#FAC900"; endif;
+  if($inRange($val, 335, 400)): return "#F45958"; endif;
+  if($inRange($val, 401, 467)): return "#F30000"; endif;
+  if($inRange($val, 468, 534)): return "#890000"; endif;
+  if($inRange($val, 535, 600)): return "#C12EFF"; endif;
+  if($val >= 601):             return "#55FF00"; endif;
 }

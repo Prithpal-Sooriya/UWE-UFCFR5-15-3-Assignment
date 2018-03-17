@@ -68,23 +68,42 @@ function updateChart() {
   //with some of my own customisation
   //https://developers.google.com/chart/interactive/docs/php_example
   //return if the doc is not ready (to preven DataTable from not being known)
-  if(document.readyState !== "complete") return;
+  if (document.readyState !== "complete")
+    return;
   var data = new google.visualization.DataTable(json);
-  
+
   //checking if one of the values inside data is 0.
-  if(data.og.length == 0) {
+  if (data.og.length == 0) {
     document.getElementById("chart_div").innerHTML = "no chart found!";
     return;
   }
-  
+
   var options = {
+    chartArea: {
+      backgroudColor: {
+        fill: "#747d8c",
+        opacity: 0.8
+      }
+    },
+//    backgroudColor: "#747d8c",
     title: "NO2 over time in " + locationName,
     hAxis: {title: 'Date'},
-    vAxis: {title: 'NO2'},
+    vAxis: {
+      title: 'NO2',
+      minValue: 0,
+      viewWindow: {
+        min: 0
+      }
+    },
     legend: "NO2 from " + date + " time range",
     width: window.innerWidth,
-    height: window.innerHeight/4
-  }
+    height: window.innerHeight / 4,
+    explorer: {
+       actions: ['dragToZoom', 'rightClickToReset'],
+       keepInBounds:true
+    }
+    
+  };
   var chart = new google.visualization.ScatterChart(document.getElementById("chart_div"));
   chart.draw(data, options);
 }
