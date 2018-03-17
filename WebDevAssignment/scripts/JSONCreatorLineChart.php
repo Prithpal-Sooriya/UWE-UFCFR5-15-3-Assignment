@@ -76,11 +76,12 @@ function createJSONUserSelectionSorted($location, $time, $date) {
     $googleChartsJSONDate .= date("m", $date->format("U")) - 1 . ", ";
     $googleChartsJSONDate .= date("d, H, i, s", $date->format("U")) . ")";
 
-    $tooltip = "<span style=\"font-size: 18pt; color: #ff0000; font-family: arial\">"
+    $tooltip = "<span style=\"font-size: 18pt; color: #000000; font-family: arial\">"
             . "Time = " . $date->format("H:i A") . "<br>"
-            . "<b>val = " . $val . "<b>"
+            . "<b style=\"color: ".NO2Color($val)."\">NO2 = " . $val . "</b>"
             . "</span>";
 
+    
     $temp[] = array("v" => $googleChartsJSONDate); //add val
     $temp[] = array("v" => (int) $val); //add val
     $temp[] = array("v" => $tooltip); //add tooltip
@@ -123,6 +124,35 @@ function createDateTime($date, $time) {
   $dateFormat = "d/m/Y H:i:s";
   $dateTime = DateTime::createFromFormat($dateFormat, "$date $time");
   return $dateTime;
+}
+
+/**
+ * function used to for retrieving the NO2 colour.
+ * @param integer $val value of NO2
+ * @return string corresponding hash colour
+ */
+function NO2Color($val) {
+
+  /**
+   * a short function used to tell if an integer is in range
+   * @param int $val value to check against
+   * @param int $min minimum value boundary
+   * @param int $max maximum value boundary
+   * @return boolean true if the value was in range, false if not
+   */
+  $inRange = function ($val, $min, $max) { return $min <= $val && $val <= $max;};
+
+  //wish there was a shorthand if statement...
+  if($inRange($val, 0, 67)):    return "#9FFF8E"; endif;
+  if($inRange($val, 68, 134)):  return "#55FF00"; endif;
+  if($inRange($val, 135, 200)): return "#48C900"; endif;
+  if($inRange($val, 201, 267)): return "#FEFE00"; endif;
+  if($inRange($val, 268, 334)): return "#FAC900"; endif;
+  if($inRange($val, 335, 400)): return "#F45958"; endif;
+  if($inRange($val, 401, 467)): return "#F30000"; endif;
+  if($inRange($val, 468, 534)): return "#890000"; endif;
+  if($inRange($val, 535, 600)): return "#C12EFF"; endif;
+  if($val >= 601):             return "#55FF00"; endif;
 }
 
 ?>

@@ -147,7 +147,12 @@ const showGraph = (json, title) => {
   if (document.readyState !== "complete")
     return;
   var data = new google.visualization.DataTable(json);
-  console.log(data);
+  
+  if (data.og.length === 0) {
+    document.getElementById("chart_div").innerHTML = "no chart found!";
+    return;
+  }
+  
   var options = {
     title: title,
     tooltip: {
@@ -170,7 +175,9 @@ const showGraph = (json, title) => {
     },
     vAxis: {
       format: "0"
-    }
+    },
+    width: window.innerWidth,
+    height: window.innerHeight / 3
   };
   if (document.readyState !== "complete")
     return;
