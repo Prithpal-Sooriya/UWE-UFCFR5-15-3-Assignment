@@ -82,7 +82,7 @@ function createJSONUserSelectionSorted($location, $time, $date) {
             . "</span>";
 
     
-    $temp[] = array("v" => $googleChartsJSONDate); //add val
+    $temp[] = array("v" => $googleChartsJSONDate); //add date
     $temp[] = array("v" => (int) $val); //add val
     $temp[] = array("v" => $tooltip); //add tooltip
     $rows[] = array("c" => $temp); //add row to new column

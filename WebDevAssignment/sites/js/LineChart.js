@@ -12,17 +12,24 @@
  * (show slider details and show google charts)
  * 
  * Using jquery
+ * 
+ * 2 versions so as to support IE
  */
-$(document).ready(() => {
+const loading = () => {
   //load google chart libraries and information (that is used by google charts)
   //running it here because it only needs to be ran once
   google.charts.load('current', {'packages': ['corechart']});
-  google.charts.setOnLoadCallback(function () {
-    showGraph();
-  });
+  google.charts.setOnLoadCallback(showGraph);
 
   //update slider info and google charts
   updateChartAndSlider();
+};
+$(document).ready(() => {
+  loading();
+});
+
+$(window).on("load", () => {
+  loading();
 });
 
 var promisesArr = [];
@@ -109,6 +116,12 @@ const updateChart = () => {
 //info retrieved from here: https://dev.to/johnpaulada/synchronous-fetch-with-asyncawait
   const request = async (url, query) => {
     //wait for fetch to finish (fetch will return promise so response is promise)
+//    var p = Promise.race([
+//      fetch(url + "?" + query),
+//      new Promise((_, reject) =>
+//        setTimeout(() => reject(new Error("Timeout")), 7000)
+//      )
+//    ]);
     const response = await fetch(url + "?" + query);
     //wait for response promise to complete, it will return json
     const json = await response.json();
@@ -118,13 +131,18 @@ const updateChart = () => {
   //request() returns a promise
   var json;
   var promise = request(url, query);
+//  promise.then(json => {
+//    console.log(json);
+//    let title = "NO2 over Time in " + locationStr + " from:\n" + datestr1 + " - " + time + " TO " + datestr2 + " - " + time;
+//    showGraph(json, title);
+//  });
 
   //store all resolved promises in this array
   //max size of 3 for a buffer (allow smooth google charts transitions
-  if (promisesArr.length < 2)
+  if (promisesArr.length < 3)
     promisesArr.push(promise);
   else
-    promisesArr[1] = promise;
+    promisesArr[2] = promise;
   Promise.all(promisesArr).then((values) => {
     json = values[values.length - 1];
     let title = "NO2 over Time in " + locationStr + " from:\n" + datestr1 + " - " + time + " TO " + datestr2 + " - " + time;
@@ -147,12 +165,11 @@ const showGraph = (json, title) => {
   if (document.readyState !== "complete")
     return;
   var data = new google.visualization.DataTable(json);
-  
   if (data.og.length === 0) {
     document.getElementById("chart_div").innerHTML = "no chart found!";
     return;
   }
-  
+
   var options = {
     title: title,
     tooltip: {
