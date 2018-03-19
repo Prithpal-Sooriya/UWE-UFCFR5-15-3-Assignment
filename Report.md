@@ -50,3 +50,22 @@ SHOW EXAMPLE USE OF Stream PARSER VS DOM PARSER WITH A TABLE/image
   - Although this was a new paradigm I was using, I did face some issues, that are still somewhat visible. The main example is by continuously moving the time interval slider for a prolonged period of time, it would cause a massive chain of Promises to complete - thus causing some "lag" till the chart is updated with the latest value.
     - A solution to this was to store all the `Promise`'s in an array (via `array.push() function`), then call the `Promise.all()` function to call only the latest promise. This Limited the number of promises to execute, and also only update the graph with the latest promise.
     - I did also try adding a timeout to the fetch promise, however that did not solve the problem (and ended up stopping new fetch requests).
+
+## Pi Chart
+- added a pi chart that displays the percentage and quantity of NO2 in different locations
+- user selection provided for the date (DD/MM/YYYY) and time (HH:MM:SS).
+- JQuery Ajax asynchronous calls for this (to show a different method of calling the php server).
+```Javascript
+let json = $.ajax({
+  url: url,
+  dataType: "json",
+  data: {
+    time: time,
+    date: datestr
+  },
+  type: "POST",
+  success: (data) => drawChart(data, time, datestr)
+//    async: false
+}).responseText;
+```
+  - JQuery async Ajax was quite easy to work with compared to Promises, however lacks flexability compared to Promises (with customised commands to do next with the `.then` command, and also easy catching of errors with `.catch` command)

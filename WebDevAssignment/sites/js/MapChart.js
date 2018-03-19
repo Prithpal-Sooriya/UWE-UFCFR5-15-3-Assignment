@@ -1,30 +1,19 @@
 /* 
- * This is a script that is used with the PieChart.html
- * @author Prithpal Sooriya
- */
-
-/*
- * starting the js script.
- * when the document is ready, run some code.
- * 2 versions so as to support IE
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 const loading = () => {
-  google.charts.load('current', {'packages': ['corechart']});
+  google.charts.load('current', {'packages': ['map'], 'mapsApiKey': config.MAP_KEY});
   google.charts.setOnLoadCallback(drawChart);
   updateSlider();
   updateChart();
 };
+
 $(document).ready(() => {
   loading();
 });
-//$(window).on("load", () => {
-//  loading();
-//});
 
-/*
- * @function updateChartAndSlider()
- * function used to update the slider value and also update the chart
- */
 const updateSlider = () => {
   let timeSlider = document.getElementById("timeSlider");
   let timeOutput = document.getElementById("timeOutput");
@@ -43,18 +32,9 @@ const updateSlider = () => {
   timeOutput.innerHTML = `${hourString}:${minuteString}:00`;
 
   //update google charts
-//  updateChart();
 };
 
-
-/*
- * @function updateChart()
- * function used to update the chart
- * 
- * uses jquery async ajax
- */
 const updateChart = () => {
-
   /*
    * @function getDateString()
    * function used to convert js date (where month starts at 0)
@@ -79,8 +59,8 @@ const updateChart = () => {
   let date = new Date(dateDOM);
   let datestr = getDateString(date);
 
-  //perform ajax
-  let url = "../scripts/JSONCreatorPieChart.php";
+
+  let url = "../scripts/JSONCreatorMap.php";
   $.ajax({
     url: url,
     dataType: "json",
@@ -89,47 +69,32 @@ const updateChart = () => {
       date: datestr
     },
     type: "POST",
-    success: (data) => drawChart(data, time, datestr)
-//    async: false
+    success: (data) => drawChart(data)
   });
-
-  //return if the doc is not ready (to preven DataTable from not being known)
-//  if (document.readyState !== "complete")
-//    return;
-//  var data = new google.visualization.DataTable(json);
-//  if (data.og.length == 0) {
-//    document.getElementById("chart_div").innerHTML = "no data found!";
-//    return;
-//  }
-//  var options = {
-//    title: "NO2 comparison at: " + datestr + " " + time,
-//    width: window.innerWidth,
-//    height: window.innerHeight / 4
-//  };
-//  var chart = new google.visualization.PieChart(document.getElementById("chart_div"));
-//  chart.draw(data, options);
 };
 
-const drawChart = (json, time, datestr) => {
+const drawChart = (json) => {
   if (document.readyState !== "complete")
     return;
   var data = new google.visualization.DataTable(json);
-  if (data.og.length === 0) {
-    document.getElementById("chart_title").innerHTML = "";
-    document.getElementById("chart_div").innerHTML = "no data found!";
-    return;
-  }
+//  if (data.og.length === 0) {
+////    document.getElementById("chart_title").innerHTML = "";
+//    document.getElementById("chart_div").innerHTML = "no data found!";
+//    return;
+//  }
   console.log(json);
-  document.getElementById("chart_title").innerHTML = "NO2 comparison at: " + datestr + " " + time;
   var options = {
-    titlePosition: 'none',
-    pieSliceText: 'value',
+//    sizeAxis: { minValue: 0, maxValue: 100 },
+    showTooltip: true,
+    showInfoWindow: true,
+    useMapTypeControl: true,
+    zoomLevel: 12,
     width: window.innerWidth,
     height: window.innerHeight / 4
   };
-  var chart = new google.visualization.PieChart(document.getElementById("chart_div"));
+
+  var chart = new google.visualization.Map(document.getElementById("chart_div"));
   chart.draw(data, options);
+
+
 };
-
-
-

@@ -10,8 +10,6 @@
  * @NOTE: try to potentially find a better way to gather all files
  * 
  * @var string relative string path to find files
- * 
- * @var integer number of files in the array.
  */
 $no2Files = array("brislington_no2.xml", "fishponds_no2.xml", "parson_st_no2.xml",
     "rupert_st_no2.xml", "wells_rd_no2.xml", "newfoundland_way_no2.xml");
@@ -21,12 +19,13 @@ $path = "../files/";
 //user requests
 $time = $_REQUEST["time"]; //e.g. 08:00:00
 $date = $_REQUEST["date"]; //e.g. 27/04/2016 in format DD/MM/YYYY
-
 //test data
 //$time = "08:00:00";
 //$date = "27/04/2016";
 echo createJSONString($time, $date);
 
+/* -------------------------------- */
+/* functions                        */
 /* -------------------------------- */
 
 /**
@@ -45,12 +44,10 @@ function createJSONString($time, $date) {
       array("label" => "NO2", "type" => "number")
   );
 
-  $rows = array();
-
   foreach ($GLOBALS["no2Files"] as $file) {
     $temp = createJSONStringSingleFile($file, $time, $date);
     if ($temp != NULL) {
-    $rows = array_merge($rows, $temp);
+      $rows = array_merge($rows, $temp);
 //      $rows[] = $temp;
     }
   }
@@ -84,8 +81,6 @@ function createJSONStringSingleFile($file, $time, $date) {
 
 //  print_r($locationID["0"]);
 //  die();
-  
-  
   #get result values (just val)
   $resultArr = $xml->xpath("//reading[@date='$date' and @time='$time']");
 //  echo(count($resultArr));
