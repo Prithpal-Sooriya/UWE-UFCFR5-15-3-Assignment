@@ -27,7 +27,8 @@ SHOW EXAMPLE USE OF Stream PARSER VS DOM PARSER WITH A TABLE/image
   - Best practice with Stream parsers is to wrap the code into a function, thus abstracting away the complexity by just calling the function. This will work for same datasets, but not for different datasets...
   - Documentation is important for other developers to understand the purpose of the DOM parser.
 
------
+---------------------
+
 # Visualisation Extension
 
 ## Scatter Chart
@@ -69,3 +70,12 @@ let json = $.ajax({
 }).responseText;
 ```
   - JQuery async Ajax was quite easy to work with compared to Promises, however lacks flexability compared to Promises (with customised commands to do next with the `.then` command, and also easy catching of errors with `.catch` command)
+
+## Maps
+- added a map that shows the different locations and clicking on them will show the values of them.
+- allows user input for Date (DD/MM/YYYY) and Time (HH:MM:SS).
+- this did require an API key for Google Maps API (as Google Charts has a dependency to Google Maps API).
+
+---------------------
+# References
+Stream Parsers

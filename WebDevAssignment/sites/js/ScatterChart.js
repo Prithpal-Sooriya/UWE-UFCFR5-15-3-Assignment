@@ -79,7 +79,7 @@ function updateChart() {
   if (document.readyState !== "complete")
     return;
   var data = new google.visualization.DataTable(json);
-
+  
   //checking if one of the values inside data is 0.
   if (data.og.length == 0) {
     document.getElementById("chart_div").innerHTML = "no chart found!";
