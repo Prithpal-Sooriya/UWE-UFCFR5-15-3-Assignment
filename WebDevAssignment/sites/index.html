@@ -6,29 +6,49 @@ and open the template in the editor.
 -->
 <html>
   <head>
-    <title>TPrithpal Sooriya Web Dev Assignment.</title>
+    <title>Prithpal Sooriya Web Dev Assignment.</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script type="text/javascript">
-      require('bootstrap');
+    <!-- bootstrap style -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!-- Bootstrap js -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>-->
+
+    <script>
+      $(document).ready(function () {
+        $("#header").load("header.html");
+      });
     </script>
   </head>
   <body>
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Web Dev Assignment</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="ScatterChart.html">Scatter Chart</a></li>
-          <li><a href="LineChart.html">Line Chart</a></li>
-          <li><a href="PieChart.html">Pie Chart</a></li>
-          <li><a href="MapChart.html">Google Maps</a></li>
-        </ul>
-      </div>
-    </nav>
+    <div id="header"></div>
+
+    <!--header - navbar -->
+    <!--    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+          <div class="navbar-brand">
+            <a href="#" class="navbar-brand">Web Dev Assignment</a>
+          </div>
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="ScatterChart.html">Scatter Chart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="LineChart.html">Line Chart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="PieChart.html">Pie Chart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="MapChart.html">Google Maps Chart</a>
+            </li>
+          </ul>
+        </nav>-->
+
 
   </body>
 </html>

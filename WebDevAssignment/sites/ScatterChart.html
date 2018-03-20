@@ -10,13 +10,22 @@ and open the template in the editor.
     <meta charset="UTF-8">
 
     <!--<link rel="stylesheet" type="text/css" href="css/slider.css">-->
-    <link rel="stylesheet" type="text/css" href="css/Chart.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/Chart.css">-->
+    <!-- bootstrap style -->
+    
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="js/ScatterChart.js"></script>
-
+    <script>
+      $(function () {
+        $("#header").load("header.html");
+      });
+    </script>
+    <!--<link rel="stylesheet" type="text/css" href="css/Chart.css">-->
   </head>
   <body>
+    <div id="header"></div>
     <div id="chart_div"></div>
 
     <!--<form action="../scripts/JSONCreatorYear.php" method="post">-->
@@ -36,7 +45,7 @@ and open the template in the editor.
         <option value="2017">2017</option>
       </select>
     </div>
-    
+
     <div>
       <span>Location:</span>
       <select id="location" onchange="updateChart()">
