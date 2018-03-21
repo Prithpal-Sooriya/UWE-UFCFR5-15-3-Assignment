@@ -5,6 +5,7 @@ Code can be found from [my Github Repository](https://github.com/Prithpal-Sooriy
 - The data files can be found in the repository's [WebDevAssignment/files](https://github.com/Prithpal-Sooriya/UWE-UFCFR5-15-3-Assignment/tree/master/WebDevAssignment/files) directory.
 - The XML generation from the CSV file can be found [here](https://github.com/Prithpal-Sooriya/UWE-UFCFR5-15-3-Assignment/blob/master/WebDevAssignment/scripts/ExtractCSVAll.php)
 - The NO2 XML generation from the XML files can be found [here](https://github.com/Prithpal-Sooriya/UWE-UFCFR5-15-3-Assignment/blob/master/WebDevAssignment/scripts/ConvertXMLtoNO2.php)
+- The Charts can be found [here](http://www.cems.uwe.ac.uk/~ps2-sooriya/UWE-UFCFR5-15-3-Assignment/WebDevAssignment/sites/)
 -----------
 # XML processing models
 XML can be processed with different techniques. 2 examples of this are the Stream API for XML(SAX) parsers and Document Object Model (DOM) parsers. In context to php, stream parsers can be seen as `XMLReader` and `XMLWriter` classes.
