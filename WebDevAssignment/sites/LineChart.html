@@ -7,14 +7,21 @@ and open the template in the editor.
 <html>
   <head>
     <title>Line Chart</title>
-    <link rel="stylesheet" type="text/css" href="css/Chart.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/Chart.css">-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="js/LineChart.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script>
+      $(document).ready(function () {
+        $("#header").load("header.html");
+      });
+    </script>
   </head>
   <body>
+    <div id="header"></div>
     <div id="chart_div"></div>
 
     <div>

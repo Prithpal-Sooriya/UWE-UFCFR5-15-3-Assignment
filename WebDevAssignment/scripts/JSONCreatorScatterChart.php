@@ -5,7 +5,7 @@
  * 
  * @author Prithpal Sooriya
  */
-
+header("Access-Control-Allow-Origin: *");
 #user requests
 $location = $_REQUEST["location"];
 $time = $_REQUEST["time"];
