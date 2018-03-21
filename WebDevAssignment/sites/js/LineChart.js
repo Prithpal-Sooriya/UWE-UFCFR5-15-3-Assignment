@@ -22,7 +22,8 @@ const loading = () => {
   google.charts.setOnLoadCallback(showGraph);
 
   //update slider info and google charts
-  updateChartAndSlider();
+  updateSlider();
+  updateChart();
 };
 $(document).ready(() => {
   loading();
@@ -40,26 +41,10 @@ var promisesArr = [];
  * 
  * It will take the slider.value and convert it into a time (and outputs it on the document)
  */
-const updateChartAndSlider = () => {
+const updateSlider = () => {
   let timeSlider = document.getElementById("timeSlider");
   let timeOutput = document.getElementById("timeOutput");
-
-  if (timeSlider === "undefined")
-    return;
-
-  //minutes
-  let minuteString = timeSlider.value - Math.floor(timeSlider.value); //get decimals only
-  minuteString *= 60; //convert decimal to minutes (e.g. 0.25 * 60 = 15 minutes)
-  minuteString = minuteString === 0 ? "00" : "" + minuteString;
-
-  //hours
-  let hourString = (timeSlider.value < 10 ? "0" : "") + Math.floor(timeSlider.value);
-
-  //update html of timer
-  timeOutput.innerHTML = `${hourString}:${minuteString}:00`;
-
-  //update google charts
-  updateChart();
+  Slider.updateSlider(timeSlider, timeOutput);
 };
 
 /*

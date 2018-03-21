@@ -31,7 +31,7 @@ for ($index = 0; $index < count($outputFileNames); $index++) {
 }
 
 function writeNO2File($inputFilePath, $outputFilePath) {
-  
+
   //xml reader
   $reader = new XMLReader();
   if (!$reader->open($inputFilePath)) {
@@ -71,24 +71,24 @@ function writeNO2File($inputFilePath, $outputFilePath) {
    *   </row>
    * </records>
    */
-  
+
   /*
    * for now just erase output file before use
    * TODO: check if file has been updated and only append.... hardish to do!!
    */
   file_put_contents($outputFilePath, "");
-  
+
   //start writing the document
   $writer->startDocument("1.0", "UTF-8");
   $writer->setIndent(true);
   $writer->startElement("data");
   $writer->writeAttribute("type", "nitrogen dioxide");
-  
+
   //xml reader move to first "row"
   while ($reader->read() && $reader->name !== "row");
 
   $i = 0;
-  
+
   $notAddLocation = true;
   $domDoc = new DOMDocument;
 
@@ -104,30 +104,30 @@ function writeNO2File($inputFilePath, $outputFilePath) {
       $writer->writeAttribute("long", $xmlElement->long->attributes()->val);
       $notAddLocation = false;
     }
-    
+
     //add 'reading' children
     $writer->startElement("reading");
     $writer->writeAttribute("date", $xmlElement->date->attributes()->val);
     $writer->writeAttribute("time", $xmlElement->time->attributes()->val);
     $writer->writeAttribute("val", $xmlElement->no2->attributes()->val);
     $writer->endElement();
-    
+
     $reader->next("row");
-    
+
     //every 1000 iterations (let say) flush the output stream (to use less memory
     if($i === 1000) {
       $i = 0;
       file_put_contents($outputFilePath, $writer->flush(true), FILE_APPEND);
     }
   }
-  
+
   $writer->endElement(); //</location>
   $writer->endElement(); //</data>
   $writer->endDocument();
   file_put_contents($outputFilePath, $writer->flush(true), FILE_APPEND);
-  
+
   $reader->close();
-  
+
 }
 
 

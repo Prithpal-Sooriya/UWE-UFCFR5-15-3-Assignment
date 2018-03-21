@@ -15,32 +15,16 @@ $(document).ready(() => {
   google.charts.load('current', {'packages': ['corechart']});
   google.charts.setOnLoadCallback(updateChart);
 
-  updateChartAndSlider();
+  updateSlider();
+  updateChart();
 });
 
-/*
- * @function updateChartAndSlider()
- * function for setting up the slider and updating the chart
- * 
- * It will take the slider.value and convert it into a time to show on document
- */
-function updateChartAndSlider() {
-  //get slider
+function updateSlider() {
   let timeSlider = document.getElementById("timeSlider");
   let timeOutput = document.getElementById("timeOutput");
-
-  let minuteString = timeSlider.value - Math.floor(timeSlider.value); //minutes equvelent to decimals on slider
-  minuteString *= 60; //convert this into minutes
-  minuteString = minuteString === 0 ? "00" : "" + minuteString;
-
-  let hourString = (timeSlider.value < 10 ? "0" : "") + Math.floor(timeSlider.value);
-
-  //update the output html
-  timeOutput.innerHTML = hourString + ":" + minuteString + ":00";
-
-  //update the google charts
-  updateChart();
+  Slider.updateSlider(timeSlider, timeOutput);
 }
+
 
 /*
  * @function updateChart()
@@ -79,7 +63,7 @@ function updateChart() {
   if (document.readyState !== "complete")
     return;
   var data = new google.visualization.DataTable(json);
-  
+
   //checking if one of the values inside data is 0.
   if (data.og.length == 0) {
     document.getElementById("chart_div").innerHTML = "no chart found!";
@@ -95,7 +79,12 @@ function updateChart() {
     },
 //    backgroudColor: "#747d8c",
     title: "NO2 over time in " + locationName,
-    hAxis: {title: 'Date'},
+    hAxis: {
+      gridlines: {
+        count: -1
+      },
+      title: 'Date'
+    },
     vAxis: {
       title: 'NO2',
 //      minValue: 0,
@@ -110,7 +99,7 @@ function updateChart() {
 //       actions: ['dragToZoom', 'rightClickToReset'],
 //       keepInBounds:true
 //    }
-    
+
   };
   var chart = new google.visualization.ScatterChart(document.getElementById("chart_div"));
   chart.draw(data, options);

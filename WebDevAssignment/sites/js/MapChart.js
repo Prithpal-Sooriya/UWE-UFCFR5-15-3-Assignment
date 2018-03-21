@@ -90,7 +90,7 @@ const drawChart = (json) => {
     useMapTypeControl: true,
     zoomLevel: 12,
     width: window.innerWidth,
-    height: window.innerHeight / 4
+    height: window.innerHeight / 2
   };
 
   var chart = new google.visualization.Map(document.getElementById("chart_div"));
