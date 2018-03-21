@@ -13,16 +13,3 @@ var config = {
 
 
 ------------
-
-## installation
-clone this repository <br/>
-`git clone git@github.com:Prithpal-Sooriya/UWE-UFCFR5-15-3-Assignment.git`
-
-if NodeJS is not installed, then install npm. You can find out how to install it [here](https://nodejs.org/en/).
-
-Once NodeJS is installed, go to this repository <br/>
-`cd <path>/UWE-UFCFR5-15-3-Assignment`<br/>
-
-And run:<br/>
-`npm install`
-- this will install the bootstrap dependencies.
