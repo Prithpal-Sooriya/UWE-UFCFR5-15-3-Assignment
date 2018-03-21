@@ -81,7 +81,7 @@ function updateChart() {
     title: "NO2 over time in " + locationName,
     hAxis: {
       gridlines: {
-        count: -1
+        count: 12
       },
       title: 'Date'
     },
@@ -93,8 +93,8 @@ function updateChart() {
 //      }
     },
     legend: "NO2 from " + date + " time range",
-    width: window.innerWidth,
-    height: window.innerHeight / 4
+//    width: window.innerWidth - 20,
+    height: window.innerHseight / 4
 //    explorer: {
 //       actions: ['dragToZoom', 'rightClickToReset'],
 //       keepInBounds:true
