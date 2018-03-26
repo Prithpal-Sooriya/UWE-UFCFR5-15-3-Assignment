@@ -93,7 +93,7 @@ function updateChart() {
 //      }
     },
     legend: "NO2 from " + date + " time range",
-//    width: window.innerWidth - 20,
+    width: window.innerWidth,
     height: window.innerHseight / 4
 //    explorer: {
 //       actions: ['dragToZoom', 'rightClickToReset'],

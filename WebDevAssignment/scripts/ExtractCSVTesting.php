@@ -14,8 +14,7 @@
  *   - there was only 1 second difference for this 1 file conversion, but larger
  *     files and multiple conversions would mean that this difference will increase
  * 
- * @todo TALK TO PRAKESH ABOUT USING DATABASE INSTEAD
- *  - what is the need for the row ID and column???
+ * @todo TALK TO PRAKESH ABOUT USING DATABASE INSTEAD - result, stick with csv file.
  */
 
 

@@ -7,7 +7,6 @@
 /**
  * Global variables to use
  * @var array array of all the files to be used
- * @NOTE: need to try and potentially find a better way to gather all the files
  * 
  * @var string relative string path to find the no2.xml files
  */

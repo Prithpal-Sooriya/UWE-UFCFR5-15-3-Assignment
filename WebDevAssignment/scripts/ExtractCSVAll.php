@@ -4,25 +4,7 @@
  * This file will convert the air_quality.csv file into MULTIPLE .xml files
  * 
  * @author Prithpal
- * @version 0.0.1
- * @package files
- * 
- * 
- * 
- * @todo Future plans 1:
- *  - checks if output files have already been created
- *    - will need to add checks if .csv has been updated (so update .xml files)
- *  - divide and conquer approach when reading and writing file...
- * 
- * @todo Future plans 2:
- *  - refactor this code!!
- *    - use associative array of outputfilenames!!
- *      - make it dynamic do creates array when reading files
- *        - removes need of switch!!
- *    - place code into functions
- *    - maybe place, outputfilenames, outputfileStrings and
- *        association key of into a class...
- *    - finally think about using threads :/
+ * @package scripts
  */
 
 $csvInputPath = "../files/air_quality.csv";
@@ -42,20 +24,14 @@ if(!file_exists($csvInputPath)) {
 
 $inputFile = fopen($csvInputPath, "rt");
 
-/*
-WHY DO WE NEED THIS!!
-$count = 1;
-$rowNum = 2;
-*/
-
 //remove the headers of the csv file (1st line of file)
 $count = count(fgetcsv($inputFile)) - 1; //-1 because we do not want location
 
 //array of tags/elements to create
 $tags = array("id", "desc", "date", "time", "nox", "no", "no2", "lat", "long");
 echo $count;
-# START CREATING FILES
 
+# START CREATING FILES STRINGS
 //array of strings representing each file
 //root DOM
 $outputFileStrings = array(
@@ -115,10 +91,6 @@ fclose($inputFile); //good practice to close file.
  *    It is to be used to query both arrays above.
  * 
  * @return string string of the xml <row> created.
- * 
- * @todo Need to add checks/validation for the $count param.
- * 
- * 
  */
 function addRow($csvArr, $tagsArr, $count) {
   $ret = '<row>';

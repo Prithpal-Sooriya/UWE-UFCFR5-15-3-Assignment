@@ -62,7 +62,7 @@ function createJSONString($time, $date) {
  * @param string $file file name to look through
  * @param string $time time in format HH:MM:SS (e.g. 08:00:00)
  * @param string $date date used in format DD/MM/YYYY (e.g. 27/04/2016)
- * @return array json array to be then used to create json string
+ * @return array JSON ARRAY to be then used to create json string
  */
 function createJSONStringSingleFile($file, $time, $date) {
   $path = $GLOBALS["path"];

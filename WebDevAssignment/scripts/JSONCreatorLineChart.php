@@ -38,6 +38,8 @@ echo createJSONUserSelectionSorted($location, $time, $date);
  * @NOTE - UK date time is very awkward to use,
  *         especially with the 'magical' date and strtotime functions!!
  *         (months and days flipped)
+ * @NOTE - Using google charts developer site (https://developers.google.com/chart/interactive/docs/dev/implementing_data_source?hl=pt-BR#jsondatatable): for working out the google charts dates.
+ * @NOTE - Used stack overflow (https://stackoverflow.com/questions/16016005/display-a-google-chart-with-json-php) and a lot of testing to create the correct json format!
  */
 function createJSONUserSelectionSorted($location, $time, $date) {
   list($day, $month, $year) = sscanf($date, "%d/%d/%d");

@@ -1,10 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This file will convert the the .xml files into no2.xml files
+ * 
+ * @author Prithpal
+ * @package scripts
  */
+
 $inputfileNames = array("brislington.xml", "fishponds.xml", "parson_st.xml", "rupert_st.xml", "wells_rd.xml", "newfoundland_way.xml");
 $outputFileNames = array();
 $path = "../files/";
@@ -30,6 +32,11 @@ for ($index = 0; $index < count($outputFileNames); $index++) {
   echo "created $outputFileNames[$index]<br><br><br>";
 }
 
+/**
+ * Function used to write a single location.xml file
+ * @param string $inputFilePath input file path of xml to use
+ * @param sting $outputFilePath output file
+ */
 function writeNO2File($inputFilePath, $outputFilePath) {
 
   //xml reader
@@ -95,6 +102,7 @@ function writeNO2File($inputFilePath, $outputFilePath) {
   //now we will loop through each "row"
   while ($reader->name === "row") {
     //create small DOM of current node/"row"
+    //this allow the use of speed of streams and easy readability of DOM
     $xmlElement = simplexml_import_dom($domDoc->importNode($reader->expand(), true));
 
     if ($notAddLocation) {
@@ -129,7 +137,4 @@ function writeNO2File($inputFilePath, $outputFilePath) {
   $reader->close();
 
 }
-
-
-
 ?>

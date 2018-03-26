@@ -28,6 +28,8 @@ echo createScatterJSON($location, $time, $date);
  * @param strigng $selectedDate user selected date, format = YYYY (e.g. 2016)
  * 
  * @return string json string of the values from corresponding xml file
+ * @NOTE - Using google charts developer site (https://developers.google.com/chart/interactive/docs/dev/implementing_data_source?hl=pt-BR#jsondatatable): for working out the google charts dates.
+ * @NOTE - Used stack overflow (https://stackoverflow.com/questions/16016005/display-a-google-chart-with-json-php) and a lot of testing to create the correct json format!
  */
 function createScatterJSON($inputFilePath, $selectedTime, $selectedDate) {
   $xml = simplexml_load_file($inputFilePath);

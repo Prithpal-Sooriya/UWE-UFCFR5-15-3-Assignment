@@ -25,7 +25,119 @@ and open the template in the editor.
   <body>
     <div id="header"></div>
 
-    
-
-  </body>
+  <center>
+    Click on the different charts above to see the NO2 values.
+    <br>
+    Below is my markdown file rendered as HTML
+    <hr/>
+  </center>
+    <div style="padding: 10px">
+    <h1><a id="UWEUFCFR5153_Assignment_0"></a>UWE-UFCFR5-15-3 Assignment</h1>
+    <p>PHP and Google charts integration with a Bristol Air Quality dataset.</p>
+    <p>Code can be found from <a href="https://github.com/Prithpal-Sooriya/UWE-UFCFR5-15-3-Assignment">my Github Repository</a></p>
+    <ul>
+      <li>The data files can be found in the repository’s <a href="https://github.com/Prithpal-Sooriya/UWE-UFCFR5-15-3-Assignment/tree/master/WebDevAssignment/files">WebDevAssignment/files</a> directory.</li>
+      <li>The XML generation from the CSV file can be found <a href="https://github.com/Prithpal-Sooriya/UWE-UFCFR5-15-3-Assignment/blob/master/WebDevAssignment/scripts/ExtractCSVAll.php">here</a></li>
+      <li>The NO2 XML generation from the XML files can be found <a href="https://github.com/Prithpal-Sooriya/UWE-UFCFR5-15-3-Assignment/blob/master/WebDevAssignment/scripts/ConvertXMLtoNO2.php">here</a></li>
+    </ul>
+    <hr>
+    <h1><a id="XML_processing_models_8"></a>XML processing models</h1>
+    <p>XML can be processed with different techniques. 2 examples of this are the Stream API for XML(SAX) parsers and Document Object Model (DOM) parsers. In context to php, stream parsers can be seen as <code>XMLReader</code> and <code>XMLWriter</code> classes.</p>
+    <h2><a id="What_are_Stream_parsers_11"></a>What are Stream parsers</h2>
+    <p>Stream parsers are, as the name suggests streams. Streams are way of processing (large) data, one line/byte at a time/sequentially. Programs can abstact away streams, thus can utilitilise the continuous flow of data without having an understanding of where the data had came from. [<a href="https://stackoverflow.com/a/1216400">stack overflow</a>]</p>
+    <p>There are 2 different types of parsers: push and pull parsers.<br>
+      The <a href="https://php.net/manual/en/class.xmlreader.php">php documentation</a> notes that <code>XMLReader</code> is an extension of XML pull parser - whereby a pull parser allows an application interact with the parser to retrieve data from it [<a href="https://docs.oracle.com/cd/E19316-01/819-3669/bnbdy/index.html">oracle</a>].<br>
+      Push parsers, on the otherhand, sends (XML) information to the client whether the client is ready or not.</p>
+    <h2><a id="What_are_DOM_oriented_parsers_18"></a>What are DOM oriented parsers</h2>
+    <p>DOM oriented parsers are an example of tree based parsers. DOM parsers will create objects (of a tree based structure) and store it inside memory. Once the tree is inside memory, DOM objects (e.g. nodes in the tree) can be easily searched [<a href="https://docs.oracle.com/cd/E17802_01/webservices/webservices/docs/1.6/tutorial/doc/SJSXP2.html">Oracle</a>] - accessing with give a time complexity of best case (binary tree) <code>O(log(n))</code> and on worst case <code>O(n)</code> [<a href="https://github.com/tim-hr/stuff/wiki/Time-complexity:-Binary-search-trees">github</a>].</p>
+    <h2><a id="Why_use_Stream_parsers_21"></a>Why use Stream parsers</h2>
+    <p>Although access times of DOM parsers are fast, they take up a considerable amount of memory compared to streams due to the requirement of storing the whole DOM tree in memory. In cases where an XML dom is too large, it can be infeasable to store the tree in memory.<br>
+      Stream parsers, on the otherhand, will use little to no memory, as they are reading (pulling) and writing (pushing) data sequentially without storing in memory.</p>
+    <p>Also in cases there is an uneven and/or large DOM inside memory, accessing parts of the DOM will take <code>O(n)</code> amount of time (where <code>n</code> would be the size of the uneven DOM). In cases such as this, stream parsers will perform much more quickly compared to DOM parsers. A good example using stream parser than DOM parser is in our project, where <code>.xml</code> files were fully read and converted to <code>no2.xml</code> files.</p>
+    <h2><a id="issues_with_Stream_parsers_27"></a>issues with Stream parsers</h2>
+    <p>Depending on the document to process, stream (pull) parsers may take multiple passes through data to create wanted output. This can be avoided by careful planning and design of when to use DOM or stream parsers. In some cases DOM parsers can be used alongside stream parsers, where smaller DOM’s are created from the parents of leaf nodes. This was done in this projects code when creating the <code>no2.XML</code> files:</p>
+    <pre><code class="language-PHP"><span class="hljs-preprocessor">&lt;?php</span>
+  <span class="hljs-comment">//the XMLReader (stream) is expanded and creates a DOM structure.</span>
+  <span class="hljs-variable">$xmlElement</span> = simplexml_import_dom(<span class="hljs-variable">$domDoc</span>-&gt;importNode(<span class="hljs-variable">$reader</span>-&gt;expand(), <span class="hljs-keyword">true</span>));
+<span class="hljs-preprocessor">?&gt;</span>
+</code></pre>
+    <p>Stream parsers can also be harder to read compared to DOM style parsers. For developers using stream parsers, it is important to document the use of the parsers to allow other developers to understand the purpose of the code easier. The reason for using DOM created by the stream parser was that it was much more easier to work with compared to pure stream parsers only.</p>
+    <hr>
+    <h1><a id="Visualisation_Extension_40"></a>Visualisation Extension</h1>
+    <h2><a id="Scatter_Chart_42"></a>Scatter Chart</h2>
+    <ul>
+      <li>The scatter chart has included colouring for each individual point (based on the colour encodings from the <a href="https://uk-air.defra.gov.uk/air-pollution/daqi">DEFRA</a> site).</li>
+      <li>Noted that some points from the dataset are negative (bad) values, I have chose to leave them in and give a “blue” colour to them. This was because (after advice from our Tutor Prakash) no information was given to either disclude these results or to use the <code>abs</code> function on them (to make the result absolute).</li>
+      <li>Added user input of:
+        <ul>
+          <li>Year (e.g. 2015) via html select/dropdown;</li>
+          <li>Location (e.g. Fishponds) via html select/dropdown;</li>
+          <li>And time (e.g. 10:00:00) via html input range/slider;</li>
+        </ul>
+      </li>
+    </ul>
+    <p><img src="images/ScatterChart.png" alt=""></p>
+    <h2><a id="Line_Chart_52"></a>Line Chart</h2>
+    <ul>
+      <li>Added a customised tooltip, which also included colour encodings from the <a href="https://uk-air.defra.gov.uk/air-pollution/daqi">DEFRA</a> site for the corresponding NO2 values.</li>
+      <li>Added user input for:
+        <ul>
+          <li>Date (e.g. 12/06/2016 in the DD/MM/YYYY format) using HTML date;</li>
+          <li>Location (e.g. Fishponds) via HTML select/dropdown;</li>
+          <li>Time Interval (e.g. 08:00:00) va HTML range/slider.</li>
+        </ul>
+      </li>
+      <li>Used majority ES6 Javascript Coding style (to utilise some benefits of modern Javascript).</li>
+      <li>This example used asynchronous Promises (by using the ES6 <code>fetch</code> command in JavaScript).
+        <ul>
+          <li>By utilising asynchronous calls, I could chain multiple calls to the php server (thus allowing for a smooth transition of chart updates when using the slider).</li>
+          <li>Although this was a new paradigm I was using, I did face some issues, that are still somewhat visible. The main example is by continuously moving the time interval slider for a prolonged period of time, it would cause a massive chain of Promises to complete - thus causing some “lag” till the chart is updated with the latest value.
+            <ul>
+              <li>A solution to this was to store all the <code>Promise</code>'s in an array (via <code>array.push() function</code>), then call the <code>Promise.all()</code> function to call only the latest promise. This Limited the number of promises to execute, and also only update the graph with the latest promise.</li>
+              <li>I did also try adding a timeout to the fetch promise, however that did not solve the problem (and ended up stopping new fetch requests).</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <p><img src="images/LineChart.png" alt=""></p>
+    <h2><a id="Pi_Chart_67"></a>Pi Chart</h2>
+    <ul>
+      <li>Added a pi chart that displays the percentage and quantity of NO2 in different locations</li>
+      <li>User selection provided for the date (DD/MM/YYYY) and time (HH:MM:SS).</li>
+      <li>JQuery Ajax asynchronous calls for this (to show a different method of calling the php server).</li>
+    </ul>
+    <pre><code class="language-Javascript"><span class="hljs-keyword">let</span> json = $.ajax({
+  url: url,
+  dataType: <span class="hljs-string">"json"</span>,
+  data: {
+    time: time,
+    date: datestr
+  },
+  type: <span class="hljs-string">"POST"</span>,
+  success: (data) =&gt; drawChart(data, time, datestr)
+<span class="hljs-comment">//    async: false</span>
+}).responseText;
+</code></pre>
+    <ul>
+      <li>JQuery async Ajax was quite easy to work with compared to Promises, however lacks flexability compared to Promises (with customised commands to do next with the <code>.then</code> command, and also easy catching of errors with <code>.catch</code> command)</li>
+    </ul>
+    <p><img src="images/PieChart.png" alt=""></p>
+    <h2><a id="Maps_88"></a>Maps</h2>
+    <ul>
+      <li>Added a map that shows the different locations and clicking on them will show the values of them.</li>
+      <li>Allows user input for Date (DD/MM/YYYY) and Time (HH:MM:SS).</li>
+      <li>This did require an API key for Google Maps API (as Google Charts has a dependency to Google Maps API).</li>
+    </ul>
+    <p><img src="images/MapChart.jpg" alt=""></p>
+    <hr>
+    <h1><a id="References_97"></a>References</h1>
+    <p>Anon (no date) <em>terminology - What is a stream? - Stack Overflow</em>. Available from: <a href="https://stackoverflow.com/questions/1216380/what-is-a-stream/1216400#1216400">https://stackoverflow.com/questions/1216380/what-is-a-stream/1216400#1216400</a> [Accessed 21 March 2018].</p>
+    <p>Anon (no date) <em>The XMLReader Class</em>. Available from: <a href="https://php.net/manual/en/class.xmlreader.php">http://php.net/manual/en/class.xmlreader.php</a> [Accessed 21 March 2018].</p>
+    <p>Anon (no date) <em>XMLWriter</em>. Available from: <a href="https://php.net/manual/en/book.xmlwriter.php">http://php.net/manual/en/book.xmlwriter.php</a> [Accessed 21 March 2018].</p>
+    <p>Anon (no date) <em>Pull Parsing versus Push Parsing</em> Avaiable from: <a href="https://docs.oracle.com/cd/E19316-01/819-3669/bnbdy/index.html">https://docs.oracle.com/cd/E19316-01/819-3669/bnbdy/index.html</a> [Accessed 21 March 2018].</p>
+    <p>Anon (no date) <em>Why StAX?</em> Available from: <a href="https://docs.oracle.com/cd/E17802_01/webservices/webservices/docs/1.6/tutorial/doc/SJSXP2.html">https://docs.oracle.com/cd/E17802_01/webservices/webservices/docs/1.6/tutorial/doc/SJSXP2.html</a> [Accessed 21 March 2018].</p>
+    <p>Anon (no date) <em>Time complexity: Binary search trees</em> Available from: <a href="https://github.com/tim-hr/stuff/wiki/Time-complexity:-Binary-search-trees">https://github.com/tim-hr/stuff/wiki/Time-complexity:-Binary-search-trees</a> [Accessed 21 March 2018].</p>
+  </div>
+</body>
 </html>
